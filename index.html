@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agence ENR — Vos prochains clients vous attendent</title>
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-border: rgba(201, 168, 76, 0.5);
+    --bg-dark: #0a0a0a;
+    --back-dark: #0d1117;
+    --placeholder: #1a1a1a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: var(--bg-dark);
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* ==================== STAGE ==================== */
+  .stage {
+    position: fixed;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%),
+      url('https://images.unsplash.com/photo-1497440001374-f26997328c1b?w=1920') center/cover no-repeat;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 48px;
+  }
+
+  /* ==================== HEADER ==================== */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    z-index: 10;
+  }
+
+  .logo {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .contact-btn {
+    padding: 10px 24px;
+    background: transparent;
+    border: 1px solid #fff;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .contact-btn:hover {
+    background: #fff;
+    color: #000;
+  }
+
+  /* ==================== HERO ==================== */
+  .hero {
+    text-align: center;
+    margin-top: 6vh;
+    z-index: 2;
+  }
+
+  .headline {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 72px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.6);
+  }
+
+  .subtitle {
+    margin-top: 18px;
+    font-size: 20px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 400;
+  }
+
+  /* ==================== CARDS ==================== */
+  .cards {
+    margin-top: auto;
+    margin-bottom: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    perspective: 1800px;
+  }
+
+  .card {
+    width: 240px;
+    height: 340px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .card.center {
+    transform: scale(1.08) translateY(-12px);
+    z-index: 3;
+  }
+  .card.center.flipped {
+    transform: scale(1.08) translateY(-12px) rotateY(180deg);
+  }
+  .card:not(.center).flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card:not(.flipped):hover {
+    transform: translateY(-8px);
+  }
+  .card.center:not(.flipped):hover {
+    transform: scale(1.08) translateY(-20px);
+  }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    border: 2px solid var(--gold-border);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+    background: var(--placeholder);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  }
+
+  /* ---------- FRONT ---------- */
+  .front {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .photo-slot {
+    width: 100%;
+    height: 200px;
+    background: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.45);
+    font-size: 14px;
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+  }
+
+  .front-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 14px 18px;
+    text-align: center;
+  }
+
+  .front-question {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .play-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 8px;
+    box-shadow: 0 6px 18px rgba(201,168,76,0.45);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .play-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 26px rgba(201,168,76,0.65);
+  }
+  .play-btn svg { width: 14px; height: 14px; fill: #000; margin-left: 3px; }
+
+  .discover {
+    margin-top: 6px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.05em;
+  }
+
+  /* ---------- BACK ---------- */
+  .back {
+    transform: rotateY(180deg);
+    background: var(--back-dark);
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: var(--gold);
+    color: #000;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .back-title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    margin-top: 14px;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 16px;
+    gap: 6px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+  .stat-num {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 9px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 4px;
+    letter-spacing: 0.03em;
+    line-height: 1.2;
+  }
+
+  .back .play-btn { margin-top: 18px; }
+
+  .back-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 16px;
+    width: 100%;
+  }
+
+  .action-btn {
+    flex: 1;
+    padding: 8px 6px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .action-btn.outline {
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+  }
+  .action-btn.outline:hover { background: rgba(255,255,255,0.1); }
+
+  .action-btn.filled {
+    background: #fff;
+    border: 1px solid #fff;
+    color: #000;
+  }
+  .action-btn.filled:hover { background: var(--gold); border-color: var(--gold); }
+
+  /* ==================== FOOTER ==================== */
+  .footer {
+    text-align: center;
+    padding: 14px 0 4px;
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    z-index: 5;
+  }
+  .footer:hover { color: var(--gold); }
+
+  /* ==================== RESPONSIVE ==================== */
+  @media (max-width: 900px) {
+    .stage { padding: 20px 24px; }
+    .headline { font-size: 44px; }
+    .cards { gap: 14px; }
+    .card { width: 180px; height: 280px; }
+    .photo-slot { height: 150px; }
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">Logo</div>
+      <button class="contact-btn">Contact</button>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1 class="headline">Vos prochains clients vous attendent.</h1>
+      <p class="subtitle">Choisissez votre profil.</p>
+    </section>
+
+    <!-- Cards -->
+    <section class="cards">
+      <!-- Card 1 : Installateur solaire -->
+      <article class="card" data-profil="Installateur Solaire">
+        <div class="face front">
+          <div class="photo-slot">📷 Votre photo ici</div>
+          <div class="front-body">
+            <div class="front-question">Vous êtes installateur solaire&nbsp;?</div>
+            <div>
+              <button class="play-btn" aria-label="Play" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <div class="discover">Découvrir →</div>
+            </div>
+          </div>
+        </div>
+        <div class="face back">
+          <span class="badge">Installateur Solaire</span>
+          <h4 class="back-title">Vos prochains clients vous attendent.</h4>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-num">35K</div>
+              <div class="stat-label">foyers/mois<br/>en recherche</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">sept.</div>
+              <div class="stat-label">Deadline<br/>2026</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">0</div>
+              <div class="stat-label">concurrent<br/>IA</div>
+            </div>
+          </div>
+          <button class="play-btn" aria-label="Play" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="back-actions">
+            <button class="action-btn outline" onclick="event.stopPropagation()">Voir l'offre</button>
+            <button class="action-btn filled" onclick="event.stopPropagation()">Prendre contact</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 : BET thermique (centre) -->
+      <article class="card center" data-profil="BET Thermique">
+        <div class="face front">
+          <div class="photo-slot">📷 Votre photo ici</div>
+          <div class="front-body">
+            <div class="front-question">Vous êtes bureau d'études thermique&nbsp;?</div>
+            <div>
+              <button class="play-btn" aria-label="Play" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <div class="discover">Découvrir →</div>
+            </div>
+          </div>
+        </div>
+        <div class="face back">
+          <span class="badge">Bureau d'Études Thermique</span>
+          <h4 class="back-title">Vos prochains clients vous attendent.</h4>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-num">3 000</div>
+              <div class="stat-label">BET en<br/>France</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">sept.</div>
+              <div class="stat-label">Deadline<br/>2026</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">0</div>
+              <div class="stat-label">concurrent<br/>IA</div>
+            </div>
+          </div>
+          <button class="play-btn" aria-label="Play" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="back-actions">
+            <button class="action-btn outline" onclick="event.stopPropagation()">Voir l'offre</button>
+            <button class="action-btn filled" onclick="event.stopPropagation()">Prendre contact</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 : Bornes de recharge -->
+      <article class="card" data-profil="IRVE">
+        <div class="face front">
+          <div class="photo-slot">📷 Votre photo ici</div>
+          <div class="front-body">
+            <div class="front-question">Vous installez des bornes de recharge&nbsp;?</div>
+            <div>
+              <button class="play-btn" aria-label="Play" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <div class="discover">Découvrir →</div>
+            </div>
+          </div>
+        </div>
+        <div class="face back">
+          <span class="badge">Installateur IRVE</span>
+          <h4 class="back-title">Vos prochains clients vous attendent.</h4>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-num">12K</div>
+              <div class="stat-label">copros<br/>éligibles</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">sept.</div>
+              <div class="stat-label">Deadline<br/>2026</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">0</div>
+              <div class="stat-label">concurrent<br/>IA</div>
+            </div>
+          </div>
+          <button class="play-btn" aria-label="Play" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="back-actions">
+            <button class="action-btn outline" onclick="event.stopPropagation()">Voir l'offre</button>
+            <button class="action-btn filled" onclick="event.stopPropagation()">Prendre contact</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Footer -->
+    <div class="footer">Comment ça marche →</div>
+  </div>
+
+<script>
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const wasFlipped = card.classList.contains('flipped');
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('flipped'));
+      if (!wasFlipped) card.classList.add('flipped');
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('flipped'));
+    }
+  });
+</script>
+</body>
+</html>
